@@ -20,8 +20,8 @@ login_manager = LoginManager(app)
 def load_user(user_id):
     print("load_user")
     return UserLogin().fromDB(user_id, dbase)
-    
-#========================= База Данных MySQL ================================
+
+#========================= База Данных SQLite3 ==============================
 
 def connect_db():
     # Подключение к базе данных
@@ -128,25 +128,27 @@ def is_valid_password(password):
 menu = [
     {
         'name': 'Главная страница сайта',
-        'url': 'main',
+        'url': 'index',
     },
     {
         'name': 'Проверка квалификации',
         'url': 'qualification-check',
     },
-    {
-        'name': 'Курсы',
-        'url': 'сourses',
-    },
+    
     #{
     #    'name': 'Задонатить',
     #    'url': 'gratitude',
     #},
     {
-        'name': 'Вход/Регистрация',
+        'name': 'Курсы',
+        'url': 'contest',
+    },
+    {
+        'name': 'Авторизация',
         'url': 'login',
-    }]
-        
+    },
+]
+
 #============================================================================
 
 
@@ -154,25 +156,25 @@ menu = [
 
 
 # ============================= Главная странца =============================
-@app.route('/main')
+@app.route('/index')
 @app.route('/')
-def main():
-    return render_template('main.html', title = 'Главная страница сайта', menu = menu)
+def index():
+    return render_template('index.html', title = 'Главная страница сайта', menu = get_menu())
 
 # ===================== Страница проверки квалификации ======================
 @app.route('/qualification-check')
 def qualification_check():
-    return render_template('qualification-check.html', title = 'Проверка квалификации', menu = menu)
-
-# ============================ Страница курсов ==============================
-@app.route('/courses')
-def courses():
-    return render_template('courses.html', title = 'Курсы', menu = menu)
+    return render_template('qualification-check.html', title = 'Проверка квалификации', menu = get_menu())
 
 # =========================== Страница задонатить ===========================
 '''@app.route('/gratitude')
 def gratitude():
-    return render_template('gratitude.html', title = 'Задонатить', menu = menu)'''
+    return render_template('gratitude.html', title = 'Задонатить', menu = get_menu())'''
+
+# ============================ Страница курсов ==============================
+@app.route('/contest')
+def contest():
+    return render_template('contest.html', title = 'Курсы', menu = get_menu())
 
 # ========================== Страница авторизации ============================
 @app.route("/login", methods=["POST", "GET"])
@@ -203,7 +205,7 @@ def register():
                 flash('Пользователь с таким логином или email уже существует.', "error")
         else:
             flash('Неправильно введены данные!', "error")
-    return render_template('register.html', title = 'Регистрация', menu = menu)
+    return render_template('register.html', title = 'Регистрация', menu = get_menu())
 
 # ======================== Страница после выхода ============================
 @app.route('/logout')
@@ -211,24 +213,44 @@ def register():
 def logout():
     logout_user()
     flash("Вы вышли из аккаунта", "success")
-    return redirect(url_for('main'))
+    return redirect(url_for('index'))
 
 # ========================== Страница профиля ===============================
 @app.route('/profile')
 @login_required
 def profile():
-    return f"""<a href="{url_for('logout')}">Выйти из профиля</a><br><br>
-                Текущий пользователь: {current_user.get_name()} {current_user.get_surname()}""" 
+    return render_template('profile.html', title = 'Профиль', menu = get_menu())
+
 
             
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('page404.html', title = 'Страница не найдена', menu = menu), 404
+    return render_template('page404.html', title = 'Страница не найдена', menu = get_menu()), 404
 @app.errorhandler(401)
 def unauthorized(error):
-    return render_template('page401.html', title = 'Вы не авторизованы', menu = menu), 401
+    return render_template('page401.html', title = 'Вы не авторизованы', menu = get_menu()), 401
 #============================================================================
 
+def get_user_info():
+    if current_user.is_authenticated:
+        return current_user.get_name(), current_user.get_surname()
+    else:
+        return None
+    
+def get_menu():
+    new_menu = menu[:-1].copy()
+    user_info = get_user_info()
+    if user_info:
+        new_menu.append({
+            'name': f'{user_info[0]} {user_info[1]}',
+            'url': 'profile',
+        })
+    else:
+        new_menu.append({
+            'name': 'Авторизация',
+            'url': 'login',
+        })
+    return new_menu
 
 #=========================== Запуск веб-приложения ==========================
 
