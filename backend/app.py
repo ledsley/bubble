@@ -19,7 +19,9 @@ login_manager = LoginManager(app)
 @login_manager.user_loader
 def load_user(user_id):
     print("load_user")
-#========================= База Данных SQLite3 ==============================
+    return UserLogin().fromDB(user_id, dbase)
+    
+#========================= База Данных MySQL ================================
 
 def connect_db():
     # Подключение к базе данных
