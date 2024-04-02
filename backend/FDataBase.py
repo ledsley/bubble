@@ -17,7 +17,7 @@ class FDataBase:
             print("Ошибка чтения из Базы Данных")
         return []
     
-    def addUser(self, name, surname, patronymic, login, email, hpsw):
+    def addUser(self, name, surname, patronymic, login, email, hpsw, role):
             try:
                 # Проверка существования пользователя по логину
                 self.__cur.execute("SELECT COUNT(*) FROM users WHERE login=%s", (login,))
@@ -37,16 +37,13 @@ class FDataBase:
                 tm = datetime.datetime.now().timestamp()
 
                 # Добавление пользователя
-                self.__cur.execute("INSERT INTO users (id, name, surname, patronymic, login, email, psw, time) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s)", (name, surname, patronymic, login, email, hpsw, tm))
+                self.__cur.execute("INSERT INTO users (id, name, surname, patronymic, login, email, psw, time, role) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)", (name, surname, patronymic, login, email, hpsw, tm, role))
 
                 # Сохранение изменений
                 self.db.commit()
             except mysql.connector.Error as e:
                 print("Ошибка при добавлении пользователя:" + str(e))
                 return False
-
-            return True
-
 
             return True
 

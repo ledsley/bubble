@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block title %}
+
     {% if title %}
         <title>Портал - {{ title }}</title>
     {% else %}
@@ -9,14 +15,14 @@
     {% endif %}
     {% endblock %}
 </head>
-<body>
+
 {%block content %}
     {% block mainmenu %}
-        <ul>
-            {% for i in menu %}
-                <li><a href="{{i.url}}">{{i.name}}</a></li>
-            {% endfor %}
-        </ul>
+    <ul>
+        {% for i in menu %}
+            <li style="display: inline; margin-left: 10px;"><a href="{{url_for(i.url)}}" style="text-decoration: none; color: white;">{{i.name}}</a></li>
+        {% endfor %}
+    </ul>
     {% endblock mainmenu %}
     {% endblock %}
 </html>

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{ super() }}
+{% if current_user.get_role() == 'admin' %}
+    <h1> Добавление пользователя </h1>
+    {% for msg in get_flashed_messages() %}
+    <div>{{msg}}</div>
+    {% endfor %}
+    <form action="/profile/add_user" method="post" class="form-contact">
+    <p><label> Имя: </label> <input type="text" name="name" value="" required /></p>
+    <p><label> Фамилия: </label> <input type="text" name="surname" value="" required /></p>
+    <p><label> Отчество: </label> <input type="text" name="patronymic" value="" required /></p>
+    <p><label> Логин: </label> <input type="text" name="login" value="" required /></p>
+    <p><label> Email: </label> <input type="text" name="email" value="" required /></p>
+    <p><label> Пароль: </label> <input type="password" name="psw1" value="" required /></p>
+    <p><label> Повторите пароль: </label> <input type="password" name="psw2" value="" required /></p>
+    <p>
+    <p><label> Роль: </label>
+        <select name="role">
+            <option value="user">Пользователь</option>
+            <option value="admin">Администратор</option>
+        </select></p>
+    <p>
+        • Имя, фамилия и отчество должны начинаться с прописной буквы<br>
+        • Email должен быть в формате username@example.com<br>
+        • Login должен состоять только из латинских букв<br>
+        • Минимальная длина пароля 8 символов<br>
+        • Пароль должен содержать как минимум одну строчную латинскую букву<br>
+        • Пароль должен содержать как минимум одну латинскую прописную<br>
+        • Пароль должен содержать как минимум один специальный символ
+    </p>
+    <p><input type="submit" value="Зарегестрировать" /></p>
+    </form>
+    <a href="{{ url_for('profile') }}"> Назад в личный кабинет </a>
+{% else %}
+    {% for msg in get_flashed_messages() %}
+    <div>{{msg}}</div>
+    {% endfor %}
+    <h1> Нет доступа </h1>
+    <a href="{{ url_for('index') }}"> Вернуться на главную страницу </a>
+{% endif %}
+{% endblock %}

@@ -127,14 +127,14 @@ def is_valid_password(password):
 
 menu = [
     {
-        'name': 'Главная страница сайта',
+        'name': 'Главная',
         'url': 'index',
     },
     {
         'name': 'Проверка квалификации',
-        'url': 'qualification-check',
+        'url': 'qualification_check',
     },
-    
+
     #{
     #    'name': 'Задонатить',
     #    'url': 'gratitude',
@@ -191,31 +191,30 @@ def login():
  
     return render_template("login.html", menu=menu, title="Авторизация")
 
-# ========================== Страница регистрации ===========================
-@app.route('/register', methods = ['POST', 'GET'])
-def register():
-    if request.method == 'POST':
-        if is_valid_name(request.form['name']) and is_valid_surname(request.form['surname']) and is_valid_patronymic(request.form['patronymic']) and is_valid_nickname(request.form['login']) and is_valid_email(request.form['email']) and is_valid_password(request.form['psw1']) and request.form['psw1'] == request.form['psw2']:
-            hash = generate_password_hash(request.form['psw1'])
-            res = dbase.addUser(request.form['name'], request.form['surname'], request.form['patronymic'], request.form['login'], request.form['email'], hash)
-            if res:
-                flash('Пользователь успешно зарегистрирован', "success")
-                return redirect(url_for('login'))
-            else:
-                flash('Пользователь с таким логином или email уже существует.', "error")
-        else:
-            flash('Неправильно введены данные!', "error")
-    return render_template('register.html', title = 'Регистрация', menu = get_menu())
-
 # ======================== Страница после выхода ============================
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash("Вы вышли из аккаунта", "success")
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 # ========================== Страница профиля ===============================
+@app.route("/profile/add_user", methods = ['POST', 'GET'])
+def add_user():
+    if request.method == 'POST':
+        if is_valid_name(request.form['name']) and is_valid_surname(request.form['surname']) and is_valid_patronymic(request.form['patronymic']) and is_valid_nickname(request.form['login']) and is_valid_email(request.form['email']) and is_valid_password(request.form['psw1']) and request.form['psw1'] == request.form['psw2']:
+            hash = generate_password_hash(request.form['psw1'])
+            res = dbase.addUser(request.form['name'], request.form['surname'], request.form['patronymic'], request.form['login'], request.form['email'], hash, request.form['role'])
+            if res:
+                flash('Пользователь успешно зарегистрирован', "success")
+                return redirect(url_for('profile'))
+            else:
+                flash('Пользователь с таким логином или email уже существует.', "error")
+        else:
+            flash('Неправильно введены данные!', "error")
+    return render_template('add_user.html', title = 'Добавление пользователя', menu = get_menu())
+
 @app.route('/profile')
 @login_required
 def profile():

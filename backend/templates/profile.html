@@ -7,7 +7,14 @@
 <a href="{{ url_for('logout') }}">Выйти из профиля</a><br><br>
 
 <p>Текущий пользователь: {{ current_user.get_surname() }} {{ current_user.get_name() }} {{ current_user.get_patronymic() }}</p>
-
+{% if current_user.get_role() == "admin" %}
+<p>Роль: Администратор</p>
+{% else %}
+<p>Роль: Пользователь</p>
+{% endif %}
 <p> Уровень: None </p>
 <p> 0/None </p>
+{% if current_user.get_role() == "admin" %}
+<a href = "/profile/add_user">Добавить пользователя</a>
+{% endif %}
 {% endblock %}
