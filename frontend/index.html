@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Registration.page</title>
+</head>
+
+<body>
+    
+
+    <div class="green-bar"></div>
+
+    <div class="red-bar"></div>
+
+    <div class="red-bar">
+        <img id="reload-btn" class="logo-img" src="dunlogo.png" alt="логотип">
+
+    </div>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form>
+                <h1>РЕГИСТРАЦИЯ</h1>
+                <br>
+                <span>используй email для регистрации</span>
+                <input type="text" placeholder="ФИО">
+                <input type="email" placeholder="Email">
+                <input type="password" placeholder="Пароль">
+                <input type="password2" placeholder="Повтори пароль">
+                <button>ДАЛЕЕ</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form>
+                <h1>Вход</h1>
+                <br>
+
+                <span>используй свой email и пароль</span>
+                <input type="email" placeholder="Email">
+                <input type="password" placeholder="Пароль">
+                <a href="">Забыл(а) пароль?</a>
+                <button>Войти</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Рады видеть тебя снова</h1>
+                    <p>Если у тебя уже есть учётная запись, нажми кнопку ниже.</p>
+                    <button class="hidden" id="login">Войти</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Привет!</h1>
+                    <p>Если у тебя ещё нет учётной записи, зарегистрируйся, чтобы использовать все возможности сайта.</p>
+                    <button class="hidden" id="register">РЕГИСТРАЦИЯ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    
+
+    <script src="script.js"></script>
+    
+</body>
+
+</html>
