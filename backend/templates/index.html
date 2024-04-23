@@ -2,18 +2,56 @@
 
 {%block content %}
 {{super()}}
-<h1> Добро пожаловать </h1>
+<div>
+        
 
-<p> Команда BUBBLE рада <br>
-    представить вам совершенно <br>
-    новый, невероятно прекрасный <br>
-    проект. <br><br>
+    <div class="welcome-text">
+        <p>Добро</p>
+        <p>пожаловать!</p>
+    </div>
 
-    смотрите, ставьте лайки и дайте деняг :(</p>
 
-<h2> Геймификация </h2>
+    <div class="rabotyagi">
+        <img id="reload-btn" class="rabotyagi-img" src="{{ url_for('static', filename='image/rabotyagi.png') }}" alt="rabotyagi">
+    </div>
+    
 
-<p> Проходите различные курсы и получайте баллы! <br><br>
-    Подтверждайте и повышайте свою квалификацию! <br><br>
-    Соревнуйтесь с коллегами! <br><br>
+    <h1 class="greensquare">
+        <p>Очень сильно важное объявление,</p>
+        <p>которое напишет админ сайта.</p>
+        <p>Здесь может быть мотивация работать.</p>
+        <p>а может и объявление о новом курсе</p>
+             <p>и т.п.</p>
+    </h1>
+
+
+    <div class="game-text">
+        <p>Геймификация</p>
+    </div>
+
+    
+    <div class="beguni">
+        <img id="reload-btn" class="beguni-img" src="{{ url_for('static', filename='image/beguni.png') }}" alt="beguni">
+    </div>
+
+
+    <h1 class="greensquare-2">
+        <p>Проходите различные курсы и получайте </p>
+        <p>баллы!</p>
+        <p></p>
+        <p>Повышайте уровень знаний и получайте</p>
+        <p>приятные бонусы и награды!</p>
+        <p></p>
+        <p>Соревнуйтесь с коллегами!</p>
+             <p>и т.п.</p>
+    </h1>
+
+
+    <div class="razviv-text">
+        <p>Развивайтесь</p>
+        <p>с нами</p>
+    </div>
+
+
+</div>
 {% endblock %}

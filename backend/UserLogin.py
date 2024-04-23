@@ -21,4 +21,4 @@ class UserLogin():
     def get_patronymic(self):
         return str(self.__user[3])
     def get_role(self):
-        return str(self.__user[8])
+        return str(self.__user[7])

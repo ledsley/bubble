@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -17,12 +17,24 @@
 </head>
 
 {%block content %}
+<div class="vmenu">
+    <div class="green-bar"></div>
+
+    <div class="red-bar"></div>
+
+    <div class="red-bar">
+        <img id="reload-btn" class="logo-img" src="{{ url_for('static', filename='image/dunlogo.png') }}" alt="логотип">
+
+    </div>
     {% block mainmenu %}
-    <ul>
-        {% for i in menu %}
-            <li style="display: inline; margin-left: 10px;"><a href="{{url_for(i.url)}}" style="text-decoration: none; color: white;">{{i.name}}</a></li>
-        {% endfor %}
-    </ul>
+    <div class="nav-buttons">
+        <ul>
+            {% for i in menu %}
+                <li style="display: inline; margin-left: 10px;"><a href="{{url_for(i.url)}}" style="text-decoration: none; color: white;">{{i.name}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
     {% endblock mainmenu %}
     {% endblock %}
 </html>

@@ -2,6 +2,6 @@
 
 {%block content %}
 {{super()}}
-<p>Ошибка доступа</p>
-<p>Страница не найдена, вернуться на <a href="{{url_for('index')}}"></a> страницу.</p>
+<p style = 'color: white;'>Ошибка доступа</p> <br>
+<a style = 'color: white; text-decoration: none;' href="{{url_for('index')}}">Страница не найдена, вернуться на главную страницу *клик*</a>
 {% endblock %}

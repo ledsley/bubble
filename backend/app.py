@@ -86,12 +86,13 @@ def is_valid_patronymic(patronymic):
     pattern = r"^[A-ZА-ЯЁ]+[\sa-zA-Zа-яёА-ЯЁ]+$"
     return bool(re.match(pattern, patronymic))
 
-# Условия проверки никнейма
-def is_valid_nickname(nickname):
-    #Проверяет, является ли адрес электронной почты допустимым.
+# Условия проверки логина
+def is_valid_login(login):
+    #Проверяет, является ли логин допустимым.
 
-    pattern = r"^[a-zA-Z]+[\sa-zA-Z]+$"
-    return bool(re.match(pattern, nickname))
+    pattern = r"^[a-zA-Z0-9]+[\sa-zA-Z0-9]+$"
+    return bool(re.match(pattern, login))
+
 
 # Условия проверки email
 def is_valid_email(email):
@@ -180,14 +181,37 @@ def contest():
 @app.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
-        user = dbase.getUserByLogin(request.form.get('login'))
-        if user and check_password_hash(user[6], request.form['psw']):
-            userlogin = UserLogin().create(user)
-            rm = True if request.form.get('remainme') else False
-            login_user(userlogin, remember=rm)
-            return redirect(url_for('profile'))
- 
-        flash('Неверная пара логин/пароль', 'error')
+        if "psw" in request.form:
+            # Авторизация
+            user = dbase.getUserByLogin(request.form.get('login'))
+            if user and check_password_hash(user[6], request.form['psw']):
+                userlogin = UserLogin().create(user)
+                rm = True if request.form.get('remainme') else False
+                login_user(userlogin, remember=rm)
+                return redirect(url_for('profile'))
+            else:
+                flash('Неверная пара логин/пароль', 'error')
+        else:
+            print ("В регистрацию попал\n")
+            print (is_valid_name(request.form['name']))
+            print (is_valid_surname(request.form['surname']))
+            print (is_valid_patronymic(request.form['patronymic']))
+            print (is_valid_login(request.form['login']))
+            print (is_valid_email(request.form['email']))
+            # Регистрация
+            if is_valid_name(request.form['name']) and is_valid_surname(request.form['surname']) and is_valid_patronymic(request.form['patronymic']) and is_valid_login(request.form['login']) and is_valid_email(request.form['email']) and is_valid_password(request.form['psw1']) and request.form['psw1'] == request.form['psw2']:
+                hash = generate_password_hash(request.form['psw1'])
+                res = dbase.addUser(request.form['name'], request.form['surname'], request.form['patronymic'], request.form['login'], request.form['email'], hash, 'user')
+                if res:
+                    flash('Пользователь успешно зарегистрирован', "success")
+                    return redirect(url_for('login'))
+                else:
+                    flash('Пользователь с таким логином или email уже существует.', "error")
+            else:
+                flash('Неправильно введены данные!', "error")
+
+    return render_template("login.html", menu=menu, title="Авторизация")
+
  
     return render_template("login.html", menu=menu, title="Авторизация")
 
@@ -203,7 +227,7 @@ def logout():
 @app.route("/profile/add_user", methods = ['POST', 'GET'])
 def add_user():
     if request.method == 'POST':
-        if is_valid_name(request.form['name']) and is_valid_surname(request.form['surname']) and is_valid_patronymic(request.form['patronymic']) and is_valid_nickname(request.form['login']) and is_valid_email(request.form['email']) and is_valid_password(request.form['psw1']) and request.form['psw1'] == request.form['psw2']:
+        if is_valid_name(request.form['name']) and is_valid_surname(request.form['surname']) and is_valid_patronymic(request.form['patronymic']) and is_valid_login(request.form['login']) and is_valid_email(request.form['email']) and is_valid_password(request.form['psw1']) and request.form['psw1'] == request.form['psw2']:
             hash = generate_password_hash(request.form['psw1'])
             res = dbase.addUser(request.form['name'], request.form['surname'], request.form['patronymic'], request.form['login'], request.form['email'], hash, request.form['role'])
             if res:
@@ -255,5 +279,5 @@ def get_menu():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
+    
 #============================================================================

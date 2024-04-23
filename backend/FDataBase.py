@@ -33,11 +33,9 @@ class FDataBase:
                     print("Пользователь с таким email уже зарегистрирован")
                     return False
 
-                # Получение текущей временной метки
-                tm = datetime.datetime.now().timestamp()
 
                 # Добавление пользователя
-                self.__cur.execute("INSERT INTO users (id, name, surname, patronymic, login, email, psw, time, role) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)", (name, surname, patronymic, login, email, hpsw, tm, role))
+                self.__cur.execute("INSERT INTO users (id, name, surname, patronymic, login, email, psw, role, progress, achivments) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, NULL, %s)", (name, surname, patronymic, login, email, hpsw, role, "Нет"))
 
                 # Сохранение изменений
                 self.db.commit()

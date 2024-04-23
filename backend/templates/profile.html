@@ -2,10 +2,9 @@
 
 {% block content %}
 {{ super() }}
-<h1> Личный кабинет </h1>
+<h1 style = 'color: white;'> Личный кабинет </h1><br>
 
-<a href="{{ url_for('logout') }}">Выйти из профиля</a><br><br>
-
+<div style = 'color: white;'>
 <p>Текущий пользователь: {{ current_user.get_surname() }} {{ current_user.get_name() }} {{ current_user.get_patronymic() }}</p>
 {% if current_user.get_role() == "admin" %}
 <p>Роль: Администратор</p>
@@ -14,7 +13,11 @@
 {% endif %}
 <p> Уровень: None </p>
 <p> 0/None </p>
+</div>
 {% if current_user.get_role() == "admin" %}
-<a href = "/profile/add_user">Добавить пользователя</a>
+<br><a style = 'color: white; text-decoration: none' href = "/profile/add_user">Добавить пользователя</a><br>
+<a style = 'color: white; text-decoration: none' href="{{ url_for('logout') }}">Выйти из профиля</a>
+{% else %}
+<br><a style = 'color: white; text-decoration: none' href="{{ url_for('logout') }}">Выйти из профиля</a>
 {% endif %}
 {% endblock %}
