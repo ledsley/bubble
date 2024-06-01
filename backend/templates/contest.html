@@ -3,5 +3,10 @@
 {% block content %}
 {{ super() }}
 <h1 style = 'color: white;'> Курсы </h1>
-
+<form method = "post" class="toggle-left">
+    <input type = "text" name = "name" placeholder="Введите название курса"> <br>
+    <input type = "text" name = "theme" placeholder="Введите тему курса"> <br>
+    <input type = "text" name = "points" placeholder="Введите кол-во очков"> <br>
+    <button type = "submit" > Добавить</button>
+</form>
 {% endblock %}
