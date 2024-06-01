@@ -1,4 +1,5 @@
 import mysql.connector
+from mysql.connector import connect, Error, MySQLConnection
 from collections import namedtuple
 import sqlite3
 import os
@@ -173,9 +174,118 @@ def gratitude():
     return render_template('gratitude.html', title = 'Задонатить', menu = get_menu())'''
 
 # ============================ Страница курсов ==============================
-@app.route('/contest')
+
+@app.route('/contest' , methods = ['GET', 'POST'])
 def contest():
-    return render_template('contest.html', title = 'Курсы', menu = get_menu())
+    if request.method == 'POST':
+        course_name = request.form['name']
+        course_theme = request.form['theme']
+        course_points = request.form['points']
+
+        dataBase = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            passwd="1111",
+            database="project"
+        )
+
+        cursorObject = dataBase.cursor()
+
+        sql= """
+        INSERT INTO courses
+        (name, theme, points)
+        VALUES ( %s, %s, %s )
+        """
+        val = [(course_name, course_theme, course_points)]
+
+        cursorObject.executemany(sql, val)
+        dataBase.commit()
+
+        dataBase.close()
+        return redirect('/contest')
+    else:
+        return render_template('contest.html', title='Курсы', menu=get_menu())
+
+#====================================доступные курсы============================================
+@app.route("/open_courses")
+def open_courses():
+    dataBase = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="1111",
+        database="project"
+    )
+
+    cursorObject = dataBase.cursor()
+
+    query = "SELECT NAME, theme FROM courses where id = 1"
+    cursorObject.execute(query)
+
+    results = cursorObject.fetchall()
+
+    for x in results:
+        print(x)
+
+    dataBase.close()
+    return render_template('open_courses.html', results = results)
+
+# ========================== Лидерборд ============================
+
+@app.route("/leaderboard")
+
+def leaderboard():
+    dataBase = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="1111",
+        database="project"
+    )
+
+    cursorObject = dataBase.cursor()
+
+    query = ("delete from leaderboard ")
+    cursorObject.execute(query)
+
+    dataBase.commit()
+
+    dataBase.close()
+
+    dataBase = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="1111",
+        database="project"
+    )
+
+    cursorObject = dataBase.cursor()
+
+    query = ("INSERT INTO leaderboard(user_id,points) SELECT  id,progress from users order by progress desc limit 10 ")
+    cursorObject.execute(query)
+
+    dataBase.commit()
+
+    dataBase.close()
+
+    dataBase = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="1111",
+        database="project"
+    )
+
+    cursorObject = dataBase.cursor()
+
+    query = "select name,surname,patronymic,points from users join leaderboard on users.id = leaderboard.user_id where progress >0;"
+    cursorObject.execute(query)
+
+    results = cursorObject.fetchall()
+
+    for x in results:
+        print(x)
+
+    dataBase.close()
+
+    return render_template('leaderboard.html', results = results)
 
 # ========================== Страница авторизации ============================
 @app.route("/login", methods=["POST", "GET"])
